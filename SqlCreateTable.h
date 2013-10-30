@@ -361,8 +361,11 @@ void createTables( const QSqlDatabase &db )
 }
 
 /**
- * set the database version in the database
- * @param The verison table to set
+ * @internal
+ * Set the table version in the database
+ * @param table The table containing schema version information
+ * @param db The database to operate on
+ * @param version The version of the table to set
  */
 template <typename Table>
 void setVersion( const Table& table, const QSqlDatabase &db , int version)

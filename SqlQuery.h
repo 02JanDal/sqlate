@@ -35,6 +35,9 @@
 
 #include <QSqlQuery>
 
+/**
+ * @brief Does some additional checking before executing queries
+ */
 class SQLATE_EXPORT SqlQuery : public QSqlQuery
 {
 public:

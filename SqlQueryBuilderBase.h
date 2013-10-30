@@ -26,7 +26,8 @@
 #include "sqlate_export.h"
 #include "SqlGlobal.h"
 
-/** Abstract base class for SQL query builders. All builders should inherit from this class.
+/**
+ * @brief Abstract base class for SQL query builders. All builders should inherit from this class.
  */
 class SQLATE_EXPORT SqlQueryBuilderBase
 {

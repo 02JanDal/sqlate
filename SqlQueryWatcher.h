@@ -29,7 +29,9 @@
 class QTimer;
 class QProcess;
 
-/** The actual watcher class, instantiated from a KDThreadRunner thread */
+/**
+ * @brief The actual watcher class, instantiated from a KDThreadRunner thread
+ **/
 class SQLATE_EXPORT SqlQueryWatcherHelper : public QObject {
 Q_OBJECT
 public:

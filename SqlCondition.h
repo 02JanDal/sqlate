@@ -33,20 +33,22 @@
 #include <boost/mpl/not.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-/** SQL NULL type, to allow using NULL in template code, rather than falling back to QVariant(). */
+/** @brief SQL NULL type, to allow using NULL in template code, rather than falling back to QVariant(). */
 struct SqlNullType {};
 static const SqlNullType SqlNull = {}; // "Null" is already in use, also in the Sql namespace, so we have to settle for this
 
-/** SQL now type, to allow using server-side current date/time in template code, rahter than hardcoded SQL strings or client-side time. */
+/** @brief SQL now type, to allow using server-side current date/time in template code, rather than hardcoded SQL strings or client-side time. */
 struct SqlNowType {};
 static const SqlNowType SqlNow = {};
 Q_DECLARE_METATYPE(SqlNowType)
 
-/** Dummy type for compile time warnings about usage of client side time. */
+/** @brief Dummy type for compile time warnings about usage of client side time. */
 struct UsageOfClientSideTime {};
 
 
-/** Represents a part of a SQL WHERE expression. */
+/**
+ * @brief Represents a part of a SQL WHERE expression.
+ **/
 class SQLATE_EXPORT SqlCondition
 {
 public:
@@ -129,8 +131,8 @@ public:
     }
 
     /**
-      Set the case sensitive flag. This is defaulted to true and must be set before calling @func addCondition() or @func addPlaceholderCondition().
-      @param isCasesensitive the operands are converted to the same case before comparison
+      Set the case sensitive flag. This is defaulted to true and must be set before calling @ref addCondition() or @ref addPlaceholderCondition().
+      @param isCaseSensitive the operands are converted to the same case before comparison
     */
     void setCaseSensitive( const bool isCaseSensitive );
     /**

@@ -32,7 +32,7 @@
 #include <boost/preprocessor/repetition.hpp>
 
 /**
- * Helper class for monitoring a set up tables for changes.
+ * @brief Helper class for monitoring a set up tables for changes.
  */
 class SQLATE_EXPORT SqlMonitor : public QObject
 {
@@ -58,13 +58,14 @@ public:
      * Monitor a row and emits a signal carrying the content of a selected column when an UPDATE is performed on this row.
      * @note you need to declare the column as "notification ready" in the SQL schema, using the flag "Notify"
      *
-     * @param table the table in which we want the row to be monitored
-     * @param column the monitored column
+     * @param table The table in which we want the row to be monitored
+     * @param value The monitored value
      *
      */
-    template <typename T>
-    bool addValueMonitor( const T&, const QVariant& value)
+    template <typename Table>
+    bool addValueMonitor( const Table& table, const QVariant& value)
     {
+        Q_UNUSED(table);
         QString processedValue = value.toString();
         //remove braces in case of an uuid
         if(processedValue.contains(QLatin1Char('{')) && processedValue.contains(QLatin1Char('}')))
@@ -73,7 +74,7 @@ public:
             processedValue.remove(QLatin1Char('}'));
         }
 
-        const QString identifier = SqlUtils::createIdentifier(T::table::sqlName() + QLatin1Char( '_' ) + T::sqlName());
+        const QString identifier = SqlUtils::createIdentifier(Table::table::sqlName() + QLatin1Char( '_' ) + Table::sqlName());
         const QString notification = QString::fromLatin1("%1_%2")
                 .arg(processedValue)
                 .arg(identifier);

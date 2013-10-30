@@ -32,9 +32,9 @@
 #include <boost/mpl/or.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-/** API to create SELECT queries in a safe way from code, without the risk of
- *  introducing SQL injection vulnerabilities or typos.
- */
+/**
+ * @brief API to create SELECT queries in a safe way from code
+ **/
 class SQLATE_EXPORT SqlSelectQueryBuilder : public SqlConditionalQueryBuilderBase
 {
 public:
@@ -115,8 +115,8 @@ public:
      * This is a convenience method to create simple joins like e.g. 'LEFT JOIN t ON c1 = c2'.
      * @param joinType The type of JOIN you want to add.
      * @param table The table to join.
-     * @param col1 The first column for the ON statement.
-     * @param col2 The second column for the ON statement.
+     * @param column1 The first column for the ON statement.
+     * @param column2 The second column for the ON statement.
      */
     void addJoin( JoinType joinType, const QString &table, const QString &column1, const QString &column2 );
     template <typename Table, typename Column1, typename Column2>
@@ -193,8 +193,9 @@ public:
 
     /**
      * Create a composed query out of two. (see UNION keyword (SQL))
-     * @param the queries to join together
-     * @param the type of union
+     * @param query1 The first query to combine
+     * @param query2 The second query to combine
+     * @param type The type of union
      */
     void combineQueries(SqlSelectQueryBuilder &query1, SqlSelectQueryBuilder &query2, const UnionType type = Union );
 

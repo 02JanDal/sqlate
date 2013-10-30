@@ -27,8 +27,9 @@
 #include <QHash>
 
 /**
- * Simple RAII class for transaction handling.
+ * @brief Simple RAII class for transaction handling.
  * @note this is not (yet) thread-safe!
+ * @todo make thread-safe
  */
 class SQLATE_EXPORT SqlTransaction
 {
@@ -58,11 +59,10 @@ public:
     void rollback();
 
     /**
-     *@Static method that returns the number of transactions being run.
-     *That allow us to make sure at least a transaction is running.
+     * @returns The number of transactions being run.
+     * That allow us to make sure at least a transaction is running.
      *
      */
-
     static int transactionsCount();
 
 private:

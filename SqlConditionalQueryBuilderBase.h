@@ -27,8 +27,9 @@
 #include "SqlCondition.h"
 #include "sqlate_export.h"
 
-/** Base class for query builders operating having a WHERE condition.
- */
+/**
+ * @brief Base class for query builders operating having a WHERE condition.
+ **/
 class SQLATE_EXPORT SqlConditionalQueryBuilderBase : public SqlQueryBuilderBase
 {
 public:

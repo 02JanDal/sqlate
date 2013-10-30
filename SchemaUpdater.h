@@ -51,13 +51,14 @@ class SQLATE_EXPORT SchemaUpdaterBase : public QObject
 public:
     /**
      * @param targetVersion The version we want to upgrade to.
+     * @param pluginName
      * @param parentWidget widget used as dialog parent
+     * @param parent
      */
     explicit SchemaUpdaterBase( int targetVersion, const QString & pluginName = QString(), QWidget* parentWidget = 0, QObject *parent = 0 );
 
     /**
      * Returns @c true if the schema needs to be updated.
-     * @param the table in which the version of the schema is stored
      * @note 1 table for the main app, 1 table for each plugin
      */
     virtual bool needsUpdate() const = 0;
@@ -159,6 +160,9 @@ struct missing_column_creator
 /**
  * Database schema updater.
  * Additionally to SchemaUpdaterBase this also adds missing tables and columns based on the given schema.
+ *
+ * @tparam Schema The schema to update (@see DECLARE_SCHEMA)
+ * @tparam tableVersion The table containing schema version information
  */
 template <typename Schema, typename tableVersion>
 class SchemaUpdater : public SchemaUpdaterBase
@@ -166,7 +170,9 @@ class SchemaUpdater : public SchemaUpdaterBase
 public:
     /**
      * @param targetVersion The version we want to upgrade to.
+     * @param pluginName
      * @param parentWidget widget used as dialog parent
+     * @param parent
      */
     explicit SchemaUpdater( int targetVersion, const QString & pluginName = QString(), QWidget* parentWidget = 0, QObject *parent = 0 ) :
         SchemaUpdaterBase(targetVersion,pluginName, parentWidget, parent)
@@ -174,7 +180,6 @@ public:
 
     /**
      * Returns @c true if the schema needs to be updated.
-     * @param the table in which the version of the schema is stored
      * @note 1 table for the main app, 1 table for each plugin
      */
     bool needsUpdate() const

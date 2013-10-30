@@ -26,7 +26,9 @@
 #include <exception>
 #include <QSqlError>
 
-
+/**
+ * @brief A standard exception, also contains a QSqlError
+ */
 class SQLATE_EXPORT SqlException : public std::exception {
 public:    
     SqlException(const QSqlError& error) throw() : m_error( error ) {}

@@ -33,9 +33,9 @@
 #include <boost/mpl/not.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-/** API to create INSERT queries in a safe way from code, without the risk of
- *  introducing SQL injection vulnerabilities or typos.
- */
+/**
+ * @brief API to create INSERT queries in a safe way from code
+ **/
 class SQLATE_EXPORT SqlInsertQueryBuilder : public SqlQueryBuilderBase
 {
 public:

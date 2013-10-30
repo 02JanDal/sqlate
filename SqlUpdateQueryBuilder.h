@@ -29,9 +29,9 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/not.hpp>
 
-/** API to create UPDATE queries in a safe way from code, without the risk of
- *  introducing SQL injection vulnerabilities or typos.
- */
+/**
+ * @brief API to create UPDATE queries in a safe way from code
+ **/
 class SQLATE_EXPORT SqlUpdateQueryBuilder : public SqlConditionalQueryBuilderBase
 {
 public:

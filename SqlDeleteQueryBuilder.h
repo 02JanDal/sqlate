@@ -24,9 +24,9 @@
 #include "SqlConditionalQueryBuilderBase.h"
 #include "sqlate_export.h"
 
-/** API to create DELETE queries in a safe way from code, without the risk of
- *  introducing SQL injection vulnerabilities or typos.
- */
+/**
+ * @brief API to create DELETE queries in a safe way from code
+ **/
 class SQLATE_EXPORT SqlDeleteQueryBuilder : public SqlConditionalQueryBuilderBase
 {
 public:
