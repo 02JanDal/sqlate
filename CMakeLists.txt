@@ -178,3 +178,4 @@ if(NOT ANDROID)
 endif()
 
 add_subdirectory(tests)
+add_subdirectory(docs)
