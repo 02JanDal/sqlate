@@ -1,0 +1,485 @@
+/**
+ *
+ * @mainpage SQLate
+ *
+ * @section intro_sec Introduction
+ *
+ * SQLate is a C++ library that allows you to write compile-time checked SQL
+ * queries. This makes it possible to find bugs faster.
+ *
+ * SQLate builds on top of the Qt Toolkit
+ * (<a href="http://qt-project.org/">qt-project.org</a>).
+ * SQLate is written and maintained by Klarälvdalens Datakonsult (KDAB,
+ * <a href="http://kdab.com/">kdab.com</a>).
+ *
+ * More information is available
+ * <a href="https://github.com/KDAB/sqlate">here</a>
+ *
+ * @section install_sec Compilation and Installation
+ *
+ * Currently the only way to get SQLate is by compiling it from source.
+ *
+ * Prerequisites:
+ * - Qt
+ * (<a href="http://qt-project.org/downloads">qt-project.org/downloads</a>)
+ * - A C++ compiler supported by Qt
+ * - CMake (<a href="http://cmake.org/">cmake.org</a>)
+ * - Optional: Git (<a href="http://git-scm.com/">git-scm.com</a>)
+ *
+ * @subsection getting_sec Getting the Source
+ *
+ * Using Git:
+ * @code
+ * git clone https://github.com/KDAB/sqlate.git sqlate
+ * @endcode
+ *
+ * @subsection compiling_sec Compiling
+ *
+ * @code
+ * cd sqlate
+ * mkdir build && cd build
+ * cmake ..
+ * make
+ * @endcode
+ *
+ * @subsection installing_sec Installing
+ *
+ * @code
+ * sudo make install
+ * @endcode
+ * This will install SQLate to the default prefix (/usr/local on linux based
+ * system)
+ *
+ * You can use
+ * @code
+ * cmake -DCMAKE_INSTALL_PREFIX=installdir ..
+ * @endcode
+ * instead of @c cmake @c .. in the compilation step to choose a different one
+ *
+ * @section getting_started_sec Getting Started
+ *
+ * Go @subpage getting_started_page for help on getting started
+ *
+ */
+
+/**
+ *
+ * @page getting_started_page Getting Started
+ *
+ * This page should serve as a starting point on how to use SQLate. Once you are
+ * done, you might want to check out the @ref examples_page "examples".
+ *
+ * This guide assumes Qt/C++ and basic SQL knowledge.
+ *
+ * @section setup_sec Setup
+ *
+ * Make sure you have a working setup of Qt, PostgreSQL and SQLate.
+ * Start by creating a new project, and setup a QSqlDatabase.
+ *
+ * @section tables_and_schemas_sec Tables and Schemas
+ *
+ * Start by creating the files Schema.h and Schema.cpp with the following
+ * content:
+ *
+ * Schema.h:
+ * @code
+ * #ifndef SCHEMA_H
+ * #define SCHEMA_H
+ *
+ * #include <SqlSchema_p.h>
+ *
+ * #define MY_PROJECT_EXPORT
+ *
+ * // Tables will go here
+ *
+ * #define MY_SCHEMA
+ *
+ * DECLARE_SCHEMA(MySchema, MY_SCHEMA);
+ *
+ * #endif
+ * @endcode
+ *
+ * Schema.cpp
+ * @code
+ * #include "Schema.h"
+ *
+ * DEFINE_SCHEMA(MY_SCHEMA);
+ * @endcode
+ *
+ * MY_PROJECT_EXPORT should be the export macro of your project (if it's a
+ * library)
+ * You can of course rename MY_SCHEMA and MySchema to something else, but for
+ * this tutorial these names will be used.
+ *
+ * To create your first table, exchange the comment in the header with the
+ * following code:
+ * @code
+ * TABLE(Animals, MY_PROJECT_EXPORT) {
+ *     SQL_NAME("Animals");
+ *     ADMIN_GROUP("admins");
+ *     USER_GROUP("users");
+ *     NO_USER_DELETE;
+ *     COLUMN(Name, QString, Sql::NotNull);
+ *     typedef boost::mpl::vector<NameType> columns;
+ * };
+ * @endcode
+ * and set change the define at the end of the header to the following:
+ * @code
+ * #define MY_SCHEMA (Animals)
+ * @endcode
+ *
+ * Now lets go through that table and see what it does:
+ * Firstly, we create a new table that will be available in C++ code
+ * as @c Animals.
+ * - In SQL, the table will be called @c Animals
+ * - Users in the @c admins group will have administrator access to the table
+ * - Users in the @c users group will not have this access, they can do basic
+ * operations though
+ * - @c NO_USER_DELETE says that users in the USER_GROUP will not be able to
+ * delete from the table
+ *   + There are other, similar options, including @c NO_USER_UPDATE,
+ * @c O_USER_DELETE, @c NO_USER_INSERT and @c ONLY_USER_SELECT
+ * - Then we tell the table we want 1 column named Name (this is the name used
+ * both for SQL and C++). More on columns later.
+ * - The typedef is just there for some template magic.
+ *
+ * @subsection columns_sec The COLUMN macro
+ *
+ * The syntax for this macro is as follows:
+ * @code
+ * COLUMN(name, type, flags, maxsize)
+ * @endcode
+ * @c name can be any name also valid in SQL and C++<br/>
+ * @c type can be one out of many common C++ and Qt types,
+ * including @c bool, @c int, @c floar, @c QString, @c QUuid, @c QDateTime,
+ * @c QTime, @c QDate, and @c QByteArray<br/>
+ * @c flags is used for specifying special properties for the column. The
+ * available flags can be found in the @link Sql::ColumnProperties @endlink
+ * enumeration
+ *
+ * Try to add a column that describes the age of the animal!
+ *
+ * @section query_builders_sec Query Builders
+ *
+ * Alright, now you have your table setup and ready, now lets use it.<br/><br/>
+ * Query builders are classes that have several properties you can set, and
+ * that then will give you a query, ready and prepared. See
+ * @subpage cond_qb_page for how to create DELETE, SELECT and UPDATE
+ * statements and @subpage insert_qb_page for how to create INSERT statements.
+ *
+ * Regardless of which query builder you use, you will always have to set the
+ * table to operate on. You can do that using the
+ * @link SqlQueryBuilderBase::setTable setTable@endlink function
+ * @code
+qb.setTable(Animals);
+ * @endcode
+ *
+ * The available query builders are:
+ * - SqlDeleteQueryBuilder (for DELETE statements) (@ref delete_qb_page)
+ * - SqlInsertQueryBuilder (for INSERT statements) (@ref insert_qb_page)
+ * - SqlSelectQueryBuilder (for SELECT statements) (@ref select_qb_page)
+ * - SqlUpdateQueryBuilder (for UPDATE statements) (@ref update_qb_page)
+ *
+ * Once you have created your query builder (see above links), you want to
+ * execute the query. To do that, you use the @c query function of the query
+ * builder. This will give you an object of type SqlQuery.
+ * @code
+SqlQuery sqlquery = qb.query();
+ * @endcode
+ * This code will create the SQL query string, prepare the query, and return
+ * the SqlQuery object. As SqlQuery is a subclass of QSqlQuery, you can then
+ * call the bindValue method (and others) to bind values to any placeholders.
+ * @warning NEVER cast SqlQuery to QSqlQuery, even though it's a subclass.
+ * SqlQuery reimplements some functions which are non-virtual, and casting
+ * would call the QSqlQuery variants.
+ *
+ * Once ready, just call @c exec:
+ * @code
+sqlquery.exec();
+ * @endcode
+ * This also checks some extra stuff, like if the database server still is
+ * available. See @subpage database_management_page for more information.
+ *
+ * After that call you can proced with processing the returned data like you
+ * would with a QSqlQuery.
+ *
+ */
+
+/**
+ * @page cond_qb_page Conditional Query Builders
+ *
+ * For query types where you have some type of WHERE part, you will meet the
+ * SqlConditionalQueryBuilderBase. The important function here is
+ * @link SqlConditionalQueryBuilderBase::whereCondition whereCondition@endlink,
+ * which gives you access to a SqlCondition reference. This SqlCondition can
+ * then be used for constructing your WHERE part.
+ *
+ * Query builders which this applies to:
+ * - @subpage delete_qb_page
+ * - @subpage select_qb_page
+ * - @subpage update_qb_page
+ *
+ * @section sqlcondition_sec How to use the SqlCondition
+ *
+ * @subsection sqlcondition_logic_operator_sec Logic Operators (AND and OR)
+ * The first important part about SqlCondition is that you have to look out for
+ * which logic operator currently is in use, AND or OR. Following are some ways
+ * of setting the logic operator to use
+ * @code
+// pass to constructor
+SqlCondition cond1(SqlCondition::And);
+SqlCondition cond2(SqlCondition::Or);
+
+// setter function
+cond1.setLogicOperator(SqlCondition::Or);
+cond2.setLogicOperator(SqlCondition::And);
+ * @endcode
+ *
+ * @note Only one (1) logic operator can be used per SqlCondition. See
+ * @ref sqlcondition_sub_cond_sec for combining different operators.
+ *
+ * @subsection sqlcondition_add_col_sec Adding values and columns to check for
+ *
+ * Adding columns:
+ * @code
+// will create WHERE surname = forename
+cond.addColumnCondition("surname", SqlCondition::Equals, "forename");
+cond.addColumnCondition(Person.Surname, SqlCondition::Equals, Person.Forename);
+ * @endcode
+ * @note For the second statement to compile, both columns need to be of the
+ * same type
+ *
+ * Adding value conditions:
+ * @code
+// will create WHERE age < 18
+cond.addValueCondition("age", SqlCondition::Less, 18);
+cond.addValueCondition(Person.Age, SqlCondition::Less, 18);
+ * @endcode
+ * @note For the second statement to compile, the value must the of the same type as the
+ * column
+ *
+ * If you don't know the value yet you might want to use a place holder:
+ * @code
+// will create WHERE surname <> :surname
+cond.addPlaceholderCondition("surename", SqlCondition::NotEquals, ":surname");
+cond.addPlaceholderCondition(Person.Surname, SqlCondition::NotEquals, ":surname");
+ * @endcode
+ *
+ * Other operators can be found in the @link SqlCondition::CompareOperator@endlink
+ * enumeration.
+ *
+ * @subsection sqlcondition_sub_cond_sec Sub-conditions
+ *
+ * Using the above you can now create basic conditions, like the following:
+ * @code
+WHERE surname = :surname AND forename = :forename
+ * @endcode
+ * While nice, it's still a long way from usable for all cases. What if we want
+ * to only check the surname if the age is over 18? We want something like
+ * this:
+ * @code
+WHERE forename = :forename AND (age < 18 OR forename = :forename)
+ * @endcode
+ * With this, if the age is under 18, the condition in the parentheses evaluates
+ * to true, regardless of the surname. But how can we express that in code?
+ * We can start by creating two SqlConditions, on for the parentheses and one
+ * for the outside (forename):
+ * @code
+SqlCondition outer(SqlCondition::And);
+outer.addPlaceholderCondition(Person.Forename, SqlCondition::Equals, ":forename");
+
+SqlCondition parentheses(SqlCondition::Or); // <- this the the expression inside of the parentheses
+parentheses.addValueCondition(Person.Age, SqlCondition::Less, 18);
+parentheses.addPlaceholderCondition(Person.Surname, SqlCondition::Equals, ":surname");
+ * @endcode
+ * So far so good? Now lets combine them, it's actually really easy:
+ * @code
+outer.addCondition(paranthese);
+ * @endcode
+ * Done! This way, you could potentionally create nested conditions with many
+ * hundred levels, all with different logic operators.
+ *
+ * @section sqlcondition_example_sec Example of usage
+ *
+ * You now know how to create a SqlCondition object, and how to create (nested)
+ * conditions using it. Now, to use the above code on a query, use the
+ * following code:
+ * @code
+SqlSelectQueryBuilder qb;
+qb.whereCondition().setLogicOperator(SqlCondition::And);
+qb.whereCondition().addPlaceholderCondition(Person.Forename, SqlCondition::Equals, ":forename");
+
+SqlCondition parentheses(SqlCondition::Or);
+parentheses.addValueCondition(Person.Age, SqlCondition::Less, 18);
+parentheses.addPlaceholderCondition(Person.Surname, SqlCondition::Equals, ":surname");
+
+qb.whereCondition().addCondition(paranthese);
+ * @endcode
+ *
+ *
+ */
+
+/**
+ * @page delete_qb_page Delete Query Builder
+ *
+ * See @ref cond_qb_page for instructions regarding the WHERE part of the
+ * DELETE statement.
+ *
+ */
+
+/**
+ * @page insert_qb_page Insert Query Builder
+ */
+
+/**
+ * @page select_qb_page Select Query Builder
+ *
+ * See @ref cond_qb_page for instructions regarding the WHERE part of the
+ * SELECT statement.
+ *
+ * @section add_columns_sec Choosing which columns to select
+ * Use @link SqlSelectQueryBuilder::addColumn addColumn@endlink to add a column
+ * to select. Here are some variants of the function (using the Animals
+ * table):
+ * @code
+qb.addColumn("Age"); // = SELECT Age FROM...
+qb.addColumn(Animals.Age); // = SELECT Age FROM...
+qb.addColumn("Age", "age"); // = SELECT Age AS age FROM...
+qb.addColumn(Animals.Age, "age"); // = SELECT Age AS age FROM...
+
+// you could also use the following for SELECT * FROM...
+qb.addAllColumns();
+ * @endcode
+ *
+ * @section joins_sec JOIN
+ * For creating JOIN statements, use @link SqlSelectQueryBuilder::addJoin
+ * addJoin@endlink. Some ways of doing that:
+ * @code
+// all of these will add INNER JOIN Owners ON Owners.Name = Animals.OwnerName
+
+SqlCondition condition;
+condition.addColumnCondition("Owners.Name", SqlCondition::Equals, "Animals.OwnerName");
+// or:
+condition.addColumnCondition(Owners.Name, SqlCondition::Equals, Animals.OwnerName);
+qb.addJoin(SqlSelectQueryBuilder::InnerJoin, "Owners", condition);
+qb.addJoin(SqlSelectQueryBuilder::InnerJoin, Owners, condition);
+qb.addJoin(SqlSelectQueryBuilder::InnerJoin, "Owners", "Owners.Name", "Animals.OwnerName");
+qb.addJoin(SqlSelectQueryBuilder::InnerJoin, Owners, "Owners.Name", "Animals.OwnerName");
+
+// excerise: which one should you use?
+ * @endcode
+ *
+ * You can take a look at @ref cond_qb_page for more information on how to use the SqlCondition
+ *
+ * @section order_group_limit_sec Sorting, Grouping and Limiting
+ * For customizing what you get from a database query, you might want to choose
+ * to sort the results, to group them and maybe to limit the number of
+ * results.
+ *
+ * @subsection order_by_sec ORDER BY Age DESC
+ * @code
+qb.addSortColumn("Age", Qt::Descending);
+qb.addSortColumn(Animals.Age, Qt::Descending);
+ * @endcode
+ *
+ * @subsection group_by_sec GROUP BY Name
+ * @code
+qb.addGroupColumn("Name");
+qb.addGroupColumn(Animals.Name);
+ * @endcode
+ *
+ * @subsection limit_sec OFFSET 5 LIMIT 10
+ * @code
+qb.addLimit(5, 10);
+ * @endcode
+ *
+ * @section finished_query_sec Finished Query
+ *
+ * Both of the following code snippets will produce the following SQL query:
+ * @code
+SELECT Animals.Name, Animals.Age AS age FROM Animals INNER JOIN Owners ON Owners.Name = Animals.OwnerName ORDER BY Animals.Age DESC GROUP BY Animals.Name OFFSET 5 LIMIT 10
+ * @endcode
+ *
+ * @code
+SqlSelectQueryBuilder qb;
+qb.setTable(Animals);
+
+qb.addColumn(Animals.Name);
+qb.addColumn(Animals.Age, "age");
+
+SqlCondition condition;
+condition.addColumnCondition(Owners.Name, SqlCondition::Equals, Animal.OwnerName);
+qb.addJoin(SqlSelectQueryBuilder::InnerJoin, Owners, condition);
+
+qb.addSortColumn(Animals.Age, Qt::Descending);
+qb.addGroupColumn(Animals.Name);
+qb.addLimit(5, 10);
+ * @endcode
+ *
+ * @code
+SqlSelectQueryBuilder qb;
+qb.setTable("Animals");
+
+qb.addColumn("Animals.Name");
+qb.addColumn("Animals.Age", "age");
+
+SqlCondition condition;
+condition.addColumnCondition("Owners.Name", SqlCondition::Equals, "Animal.OwnerName");
+qb.addJoin(SqlSelectQueryBuilder::InnerJoin, "Owners", condition);
+
+qb.addSortColumn("Animals.Age", Qt::Descending);
+qb.addGroupColumn("Animals.Name");
+qb.addLimit(5, 10);
+ * @endcode
+ *
+ * Now take a look at both of the above code snippets. There is a typo in each
+ * of them, at the same place in both. But the first snippet won't compile
+ * because of that. Typo found, typo fixed, nice!
+ */
+
+/**
+ * @page update_qb_page Update Query Builder
+ *
+ * See @ref cond_qb_page for instructions regarding the WHERE part of the
+ * UPDATE statement.
+ *
+ * The SqlUpdateQueryBuilder provides one function (and some overloads)
+ * for setting which values the query will set, called
+ * @link SqlUpdateQueryBuilder::addColumnValue addColumnValue@endlink.
+ *
+ * The basic usage of this function is
+ * @code
+ * addColumnValue("sql_column_name", value);
+ * @endcode
+ *
+ * Now, to make use of the tables created with the TABLE macro, you will
+ * probably want to use on of the overloads. We then can use the
+ * @link SqlUpdateQueryBuilder::query query@endlink function to retrieve our
+ * query.<br/>
+ * Using the table created in the @ref getting_started_page guide, we could
+ * use the following code to celebrate the 5th birthday of our animal:
+ * @code
+ * SqlUpdateQueryBuilder qb;
+ * qb.addColumnValue(Animals.Age, 5);
+ * qb.query().exec();
+ * @endcode
+ * Not a single string, nice right?
+ * You could now go ahead and add more values to set.
+ *
+ */
+
+/**
+ * @page examples_page Examples
+ */
+
+/**
+ * @page database_management_page Database Management
+ */
+
+/**
+ * @todo Documentation: Database management and query cache
+ * @todo Documentation: Watchers and Monitors
+ * @todo Documentation: Transaction
+ * @todo Documentation: Create table and schema updater
+ * @todo Documentation: Examples
+ */
