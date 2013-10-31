@@ -33,16 +33,28 @@
 #include <boost/mpl/not.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-/** @brief SQL NULL type, to allow using NULL in template code, rather than falling back to QVariant(). */
+/**
+ * @brief SQL NULL type, to allow using NULL in template code, rather than falling back to QVariant().
+ *
+ * @ingroup query_builder_group
+ */
 struct SqlNullType {};
 static const SqlNullType SqlNull = {}; // "Null" is already in use, also in the Sql namespace, so we have to settle for this
 
-/** @brief SQL now type, to allow using server-side current date/time in template code, rather than hardcoded SQL strings or client-side time. */
+/**
+ * @brief SQL now type, to allow using server-side current date/time in template code, rather than hardcoded SQL strings or client-side time.
+ *
+ * @ingroup query_builder_group
+ */
 struct SqlNowType {};
 static const SqlNowType SqlNow = {};
 Q_DECLARE_METATYPE(SqlNowType)
 
-/** @brief Dummy type for compile time warnings about usage of client side time. */
+/**
+ * @brief Dummy type for compile time warnings about usage of client side time.
+ *
+ * @ingroup query_builder_group
+ */
 struct UsageOfClientSideTime {};
 
 
@@ -50,6 +62,8 @@ struct UsageOfClientSideTime {};
  * @brief Represents a part of a SQL WHERE expression.
  *
  * @b Example: @link example_select_qb.cpp@endlink
+ *
+ * @ingroup query_builder_group
  */
 class SQLATE_EXPORT SqlCondition
 {

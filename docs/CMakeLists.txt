@@ -26,6 +26,7 @@ if(DOXYGEN_FOUND)
     gettingstarted.h
     insertquerybuilder.h
     mainpage.h
+    modules.h
     selectquerybuilder.h
     transactions.h
     updatequerybuilder.h

@@ -35,7 +35,9 @@
 
 /**
  * @brief API to create INSERT queries in a safe way from code
- **/
+ *
+ * @ingroup query_builder_group
+ */
 class SQLATE_EXPORT SqlInsertQueryBuilder : public SqlQueryBuilderBase
 {
 public:

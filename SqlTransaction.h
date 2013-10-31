@@ -30,6 +30,8 @@
  * @brief Simple RAII class for transaction handling.
  * @note this is not (yet) thread-safe!
  * @todo make thread-safe
+ *
+ * @ingroup query_management_group
  */
 class SQLATE_EXPORT SqlTransaction
 {

@@ -28,6 +28,8 @@ class SqlQuery;
 
 /**
  * A per-connection cache prepared query cache.
+ *
+ * @ingroup query_management_group
  */
 namespace SqlQueryCache
 {

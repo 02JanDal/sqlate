@@ -35,6 +35,8 @@ class QSqlError;
 
 /**
  * Misc helper functions around SQL/database access.
+ *
+ * @ingroup query_management_group
  */
 namespace SqlUtils
 {

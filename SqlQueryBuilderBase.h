@@ -28,6 +28,8 @@
 
 /**
  * @brief Abstract base class for SQL query builders. All builders should inherit from this class.
+ *
+ * @ingroup query_builder_group
  */
 class SQLATE_EXPORT SqlQueryBuilderBase
 {

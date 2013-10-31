@@ -34,7 +34,9 @@
 
 /**
  * @brief API to create SELECT queries in a safe way from code
- **/
+ *
+ * @ingroup query_builder_group
+ */
 class SQLATE_EXPORT SqlSelectQueryBuilder : public SqlConditionalQueryBuilderBase
 {
 public:

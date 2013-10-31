@@ -39,6 +39,8 @@
  * @brief Does some additional checking before executing queries
  *
  * @b Example: @link example_select_qb.cpp@endlink
+ *
+ * @ingroup query_management_group
  */
 class SQLATE_EXPORT SqlQuery : public QSqlQuery
 {

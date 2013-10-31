@@ -31,7 +31,8 @@ class QProcess;
 
 /**
  * @brief The actual watcher class, instantiated from a KDThreadRunner thread
- **/
+ * @internal
+ */
 class SQLATE_EXPORT SqlQueryWatcherHelper : public QObject {
 Q_OBJECT
 public:

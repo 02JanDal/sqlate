@@ -33,6 +33,8 @@
 
 /**
  * @brief Helper class for monitoring a set up tables for changes.
+ *
+ * @ingroup query_management_group
  */
 class SQLATE_EXPORT SqlMonitor : public QObject
 {

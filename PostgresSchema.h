@@ -33,6 +33,7 @@
  */
 namespace Sql {
 
+/// @ingroup schemaupdater_group
 TABLE( PgUser, SQLATE_EXPORT ) {
     SQL_NAME( "pg_user" );
     COLUMN( usename, QString, Null );
@@ -46,6 +47,7 @@ TABLE( PgUser, SQLATE_EXPORT ) {
     typedef boost::mpl::vector<usenameType, usesysidType, usecreatedbType, usesuperType, usecatupdType, usereplType, passwdType, valuntilType> columns;
 };
 
+/// @ingroup schemaupdater_group
 TABLE( PgGroup, SQLATE_EXPORT ) {
     SQL_NAME( "pg_group" );
     COLUMN( groname, QString, Null );
@@ -53,6 +55,7 @@ TABLE( PgGroup, SQLATE_EXPORT ) {
     typedef boost::mpl::vector<gronameType, grosysidType> columns;
 };
 
+/// @ingroup schemaupdater_group
 TABLE( PgAuthMembers, SQLATE_EXPORT ) {
     SQL_NAME( "pg_auth_members" );
     COLUMN( roleid, int, NotNull );
@@ -62,8 +65,10 @@ TABLE( PgAuthMembers, SQLATE_EXPORT ) {
     typedef boost::mpl::vector<roleidType, memberType, grantorType, admin_optionType> columns;
 };
 
+/// @internal
 #define POSTGRES_SCHEMA (PgUser)(PgGroup)(PgAuthMembers)
 
+/// @internal
 DECLARE_SCHEMA( PostgresSchema, POSTGRES_SCHEMA );
 
 }

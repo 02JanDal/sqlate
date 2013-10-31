@@ -31,7 +31,9 @@
 
 /**
  * @brief API to create UPDATE queries in a safe way from code
- **/
+ *
+ * @ingroup query_builder_group
+ */
 class SQLATE_EXPORT SqlUpdateQueryBuilder : public SqlConditionalQueryBuilderBase
 {
 public:

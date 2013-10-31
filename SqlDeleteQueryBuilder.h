@@ -26,7 +26,9 @@
 
 /**
  * @brief API to create DELETE queries in a safe way from code
- **/
+ *
+ * @ingroup query_builder_group
+ */
 class SQLATE_EXPORT SqlDeleteQueryBuilder : public SqlConditionalQueryBuilderBase
 {
 public:

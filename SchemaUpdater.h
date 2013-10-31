@@ -43,6 +43,8 @@
  * Connect the signals defined in here to the log window.
  *
  * @note Use SchemaUpdater instead!
+ *
+ * @ingroup schemaupdater_group
  */
 
 class SQLATE_EXPORT SchemaUpdaterBase : public QObject
@@ -163,6 +165,8 @@ struct missing_column_creator
  *
  * @tparam Schema The schema to update (@see DECLARE_SCHEMA)
  * @tparam tableVersion The table containing schema version information
+ *
+ * @ingroup schemaupdater_group
  */
 template <typename Schema, typename tableVersion>
 class SchemaUpdater : public SchemaUpdaterBase

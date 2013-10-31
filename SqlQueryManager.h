@@ -31,7 +31,9 @@ class SqlQuery;
 
 /**
  * @brief Keeps track of queries and handles unexpected database disconnections.
- **/
+ *
+ * @ingroup query_management_group
+ */
 class SQLATE_EXPORT SqlQueryManager
 {
 

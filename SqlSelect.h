@@ -43,6 +43,8 @@
 /**
  * @file SqlSelect.h
  * Select query expression templates.
+ *
+ * @ingroup function_query_group
  */
 
 namespace Sql {
