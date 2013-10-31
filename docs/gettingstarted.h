@@ -3,7 +3,7 @@
  * @page getting_started_page Getting Started
  *
  * This page should serve as a starting point on how to use SQLate. Once you are
- * done, you might want to check out the @ref examples_page "examples".
+ * done, you might want to check out the examples.
  *
  * This guide assumes Qt/C++ and basic SQL knowledge.
  *

@@ -60,8 +60,7 @@
  *
  * Go @subpage getting_started_page for help on getting started
  *
- * You might also want to checkout the @subpage examples_page for some
- * examples on how to use SQLate
+ * You might also want to checkout the examples.
  *
  * Other pages with more information:
  * - @subpage createtable_and_schemaupdater_page

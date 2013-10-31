@@ -37,6 +37,8 @@
 
 /**
  * @brief Does some additional checking before executing queries
+ *
+ * @b Example: @link example_select_qb.cpp@endlink
  */
 class SQLATE_EXPORT SqlQuery : public QSqlQuery
 {

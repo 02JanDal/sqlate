@@ -179,3 +179,4 @@ endif()
 
 add_subdirectory(tests)
 add_subdirectory(docs)
+add_subdirectory(examples)

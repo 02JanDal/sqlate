@@ -48,7 +48,9 @@ struct UsageOfClientSideTime {};
 
 /**
  * @brief Represents a part of a SQL WHERE expression.
- **/
+ *
+ * @b Example: @link example_select_qb.cpp@endlink
+ */
 class SQLATE_EXPORT SqlCondition
 {
 public:

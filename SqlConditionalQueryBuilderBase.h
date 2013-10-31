@@ -29,6 +29,8 @@
 
 /**
  * @brief Base class for query builders operating having a WHERE condition.
+ *
+ * @b Example: @link example_select_qb.cpp@endlink
  **/
 class SQLATE_EXPORT SqlConditionalQueryBuilderBase : public SqlQueryBuilderBase
 {

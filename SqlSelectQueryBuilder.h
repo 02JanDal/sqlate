@@ -231,5 +231,8 @@ private:
     uint m_limitOffset;
     uint m_limitLength;
 };
+/** @class SqlSelectQueryBuilder
+  * @example example_select_qb.cpp
+  */
 
 #endif
