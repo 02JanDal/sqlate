@@ -58,11 +58,13 @@
  *
  * @section getting_started_sec Getting Started
  *
- * Go @subpage getting_started_page for help on getting started
+ * Go @subpage getting_started_page for help on getting started and
+ * @ref functionqueries_page for some template magic.
  *
  * You might also want to checkout the examples.
  *
  * Other pages with more information:
+ * - @subpage functionqueries_page
  * - @subpage createtable_and_schemaupdater_page
  * - @subpage database_management_page
  * - @subpage transactions_page

@@ -23,10 +23,12 @@ if(DOXYGEN_FOUND)
     createtableschemaupdater.h
     databasemanagement.h
     deletequerybuilder.h
+    functionqueries.h
     gettingstarted.h
     insertquerybuilder.h
     mainpage.h
     modules.h
+    select.h
     selectquerybuilder.h
     transactions.h
     updatequerybuilder.h
